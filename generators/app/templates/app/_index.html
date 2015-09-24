@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:ng="http://angularjs.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!--让 IE 浏览器运行在最新的渲染模式下-->
+  <meta name="renderer" content="webkit">
+  <!--让部分国产浏览器默认采用高速模式渲染页面-->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= slugifiedAppName %></title>
+
+  <!--build:css assets/css/app.min.css-->
+  <link href="assets/css/app.css" rel="stylesheet">
+  <!--/build-->
+
+  <!--[if lte IE 8]>
+  <!--build:js js/ie.lib.min.js-->
+  <script type="text/javascript" src="js/ie.lib.js"></script>
+  <!--/build-->
+  <![endif]-->
+</head>
+<body>
+<div id="ng-app" ng-app="app" ng-controller="AppCtrl" ng-cloak class="ng-cloak">
+
+  <div ng-view></div>
+
+</div>
+
+<!--build:js js/lib.min.js-->
+<script type="text/javascript" src="js/lib.js"></script>
+<!--/build -->
+<!--build:js js/app.min.js-->
+<script type="text/javascript" src="js/app.js"></script>
+<!--/build -->
+<!--build:js js/components/demo/demo.min.js-->
+<script type="text/javascript" src="js/components/demo/demo.js"></script>
+<!--/build -->
+
+</body>
+</html>
