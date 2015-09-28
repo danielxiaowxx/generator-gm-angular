@@ -1,24 +1,12 @@
 'use strict';
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
-var child_process = require('child_process');
 var yosay = require('yosay');
 var Promise = require('bluebird');
 var path = require('path');
 var s = require('underscore.string');
 var logger = require('./logger');
-
-var exec = function (cmd) {
-  return new Promise(function (resolve, reject) {
-    child_process.exec(cmd, function (err, res) {
-      if(err) {
-        reject(err);
-      } else {
-        resolve(res);
-      }
-    });
-  });
-};
+var common = require('./common');
 
 // Global Variables
 var folder, folderPath;
@@ -36,7 +24,7 @@ module.exports = yeoman.generators.Base.extend({
       if (!this.options['skip-install']) {
         logger.green('Running npm install for you....');
         logger.green('This may take a couple minutes.');
-        exec('cd ' + folder + ' && npm install --verbose && bower install --verbose && gulp pre-dev')
+        common.exec('cd ' + folder + ' && npm install && bower install && gulp pre-dev')
           .then(function () {
             logger.log('');
             logger.green('------------------------------------------');
@@ -59,7 +47,7 @@ module.exports = yeoman.generators.Base.extend({
   checkForGit: function () {
     var done = this.async();
 
-    exec('git --version')
+    common.exec('git --version')
       .then(function () {
         done();
       })
@@ -99,7 +87,7 @@ module.exports = yeoman.generators.Base.extend({
 
     logger.green('Cloning the gm-angular repo.......');
 
-    exec('git clone http://gitlab.globalmarket.com/spec/gm-angular-seed-project.git ' + folder)
+    common.exec('git clone http://gitlab.globalmarket.com/spec/gm-angular-seed-project.git --branch master --single-branch ' + folder)
       .then(function () {
         done();
       })
@@ -109,35 +97,18 @@ module.exports = yeoman.generators.Base.extend({
       });
   },
 
-  removeFiles: function () {
-    var done = this.async();
-
-    var files = [
+  removeFiles: function() {
+    common.removeFiles(this, [
       'package.json',
       'bower.json',
       'app/index.html'
-    ];
-
-    var remove = [];
-
-    for(var i = 0; i < files.length; i++) {
-      remove.push(exec('rm ./' + folder + '/' + files[i]));
-    };
-
-    Promise.all(remove)
-      .then(function () {
-        done();
-      })
-      .catch(function (err) {
-        logger.red(err);
-        return;
-      });
+    ], folder)
   },
 
   remoteGitRemote: function() {
     var done = this.async();
 
-    exec('cd ' + folder + ' && git remote remove origin').then(function() {
+    common.exec('cd ' + folder + ' && git remote remove origin').then(function() {
       done();
     })
     .catch(function (err) {

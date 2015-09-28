@@ -1,0 +1,14 @@
+yo gm-angular
+
+   Create angular project
+
+yo gm-angular:add-module moduleName
+
+   Add a angular module to the project
+
+   Example:
+       yo gm-angular:add-module user
+
+yo gm-angular:add-controller
+
+   Add controller and template file to the module

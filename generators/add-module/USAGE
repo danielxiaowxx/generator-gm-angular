@@ -1,0 +1,5 @@
+Description:
+    Add a angular module to the project
+
+Example:
+    yo gm-angula:add-module user
