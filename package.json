@@ -1,12 +1,12 @@
 {
   "name": "generator-gm-angular",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Yeoman generator",
   "license": "MIT",
   "main": "generators/app/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/daniel/generator-gm-angular.git"
+    "url": "git+https://github.com/danielxiaowxx/generator-gm-angular.git"
   },
   "author": "Daniel Xiao (https://github.com/danielxiaowxx)",
   "scripts": {
@@ -29,9 +29,9 @@
     "mocha": "*"
   },
   "bugs": {
-    "url": "https://github.com/daniel/generator-gm-angular/issues"
+    "url": "https://github.com/danielxiaowxx/generator-gm-angular/issues"
   },
-  "homepage": "https://github.com/daniel/generator-gm-angular#readme",
+  "homepage": "https://github.com/danielxiaowxx/generator-gm-angular#readme",
   "directories": {
     "test": "test"
   }
