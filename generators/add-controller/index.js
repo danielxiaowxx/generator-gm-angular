@@ -19,6 +19,7 @@ module.exports = yeoman.generators.Base.extend({
     }, {
       name    : 'ctrlName',
       message : 'What is your controller name?',
+      default: 'list',
       required: true
     }];
 
@@ -32,9 +33,9 @@ module.exports = yeoman.generators.Base.extend({
       this.camelCtrlName = s(this.ctrlName).camelize().value(); // => demoUser
       this.firstCapCamelCtrlName = s(this.camelCtrlName).capitalize().value(); // => DemoUser
 
-      ctrlFolder = 'app/components/' + this.moduleName + '/controllers';
+      ctrlFolder = 'public/app/components/' + this.moduleName + '/controllers';
       ctrlFolderPath = './' + ctrlFolder + '/';
-      tplFolder = 'app/components/' + this.moduleName + '/assets/partials';
+      tplFolder = 'public/app/components/' + this.moduleName + '/assets/partials';
       tplFolderPath = './' + tplFolder + '/';
 
       done();
@@ -60,7 +61,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   addRoute: function() {
-    var fullPath = 'app/components/' + this.moduleName + '/' + this.moduleName + '.js';
+    var fullPath = 'public/app/components/' + this.moduleName + '/' + this.moduleName + '.js';
     util.rewriteFile({
       file     : fullPath,
       insertPrev: true,
@@ -75,7 +76,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   buildScript: function() {
-    common.exec('gulp pre-dev')
+    common.exec('cd public && gulp pre-dev')
   }
 
 });

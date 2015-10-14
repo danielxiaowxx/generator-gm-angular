@@ -23,7 +23,7 @@ module.exports = yeoman.generators.Base.extend({
     this.camelModuleName = s(this.moduleName).camelize().value(); // => demoUser
     this.firstCapCamelModuleName = s(this.camelModuleName).capitalize().value(); // => DemoUser
 
-    folder = 'app/components/' + this.moduleName;
+    folder = 'public/app/components/' + this.moduleName;
     folderPath = './' + folder + '/';
   },
 
@@ -61,8 +61,20 @@ module.exports = yeoman.generators.Base.extend({
       });
   },
 
+  addLessImport: function() {
+    var fullPath = 'public/app/assets/less/app.less';
+    util.rewriteFile({
+      file     : fullPath,
+      needle   : '@import "app-special";',
+      splicable: [
+        '',
+        '@import "../../components/' + this.moduleName + '/assets/less/' + this.moduleName + '.less";'
+      ]
+    });
+  },
+
   addScript: function() {
-    var fullPath = 'app/index.html';
+    var fullPath = 'public/app/index.html';
     util.rewriteFile({
       file     : fullPath,
       needle   : '<!--/build -->',
@@ -75,7 +87,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   addDependencyToApp: function() {
-    var fullPath = 'app/app.js';
+    var fullPath = 'public/app/app.js';
     util.rewriteFile({
       file     : fullPath,
       isAppend: true,
@@ -88,6 +100,6 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   buildScript: function() {
-    common.exec('gulp pre-dev')
+    common.exec('cd public && gulp pre-dev')
   }
 });

@@ -24,7 +24,12 @@ module.exports = yeoman.generators.Base.extend({
       if (!this.options['skip-install']) {
         logger.green('Running npm install for you....');
         logger.green('This may take a couple minutes.');
-        common.exec('cd ' + folder + ' && npm install && bower install && gulp pre-dev')
+        logger.log('installing node project');
+        common.exec('cd ' + folder + ' && npm install')
+          .then(function() {
+            logger.log('installing angular project');
+            return common.exec('cd ' + folder + '/public && npm install && bower install && gulp pre-dev')
+          })
           .then(function () {
             logger.log('');
             logger.green('------------------------------------------');
@@ -32,7 +37,9 @@ module.exports = yeoman.generators.Base.extend({
             logger.log('');
             logger.green('To Get Started, run the following command:');
             logger.log('');
-            logger.yellow('cd ' + folder + ' && gulp develop');
+            logger.yellow('cd ' + folder + ' && nodemon bin/www');
+            logger.log('');
+            logger.yellow('cd ' + folder + '/public && gulp develop');
             logger.log('');
             logger.green('Happy Hacking!');
             logger.green('------------------------------------------');
@@ -82,12 +89,27 @@ module.exports = yeoman.generators.Base.extend({
     }.bind(this));
   },
 
-  cloneRepo: function () {
+  cloneAPIRepo: function() {
+    var done = this.async();
+
+    logger.green('Cloning the gm-restify-node-api-seed repo.......');
+
+    common.exec('git clone http://gitlab.globalmarket.com/spec/gm-restify-node-api-seed.git --branch master --single-branch ' + folder)
+      .then(function () {
+        done();
+      })
+      .catch(function (err) {
+        logger.red(err);
+        return;
+      });
+  },
+
+  cloneGMAngularRepo: function () {
     var done = this.async();
 
     logger.green('Cloning the gm-angular repo.......');
 
-    common.exec('git clone http://gitlab.globalmarket.com/spec/gm-angular-seed-project.git --branch master --single-branch ' + folder)
+    common.exec('cd ./' + folder + '/public && rm -rf ./* && git clone http://gitlab.globalmarket.com/spec/gm-angular-seed-project.git --branch master --single-branch .')
       .then(function () {
         done();
       })
@@ -100,8 +122,9 @@ module.exports = yeoman.generators.Base.extend({
   removeFiles: function() {
     common.removeFiles(this, [
       'package.json',
-      'bower.json',
-      'app/index.html'
+      'public/package.json',
+      'public/bower.json',
+      'public/app/index.html'
     ], folder)
   },
 
@@ -109,6 +132,8 @@ module.exports = yeoman.generators.Base.extend({
     var done = this.async();
 
     common.exec('cd ' + folder + ' && git remote remove origin').then(function() {
+      return common.exec('cd ' + folder + '/public && git remote remove origin')
+    }).then(function() {
       done();
     })
     .catch(function (err) {
@@ -132,7 +157,7 @@ module.exports = yeoman.generators.Base.extend({
     }, {
       name: 'appKeywords',
       message: 'How would you describe your application in comma seperated key words?',
-      default: 'GlobalMarket, AngularJS'
+      default: 'GlobalMarket, AngularJS, Restify, API'
     }, {
       name: 'appAuthor',
       message: 'What is your company/author name?'
@@ -164,10 +189,20 @@ module.exports = yeoman.generators.Base.extend({
         capitalizedAppAuthor: this.capitalizedAppAuthor
       });
 
+    // copy package.json
+    this.fs.copyTpl(
+      this.templatePath('public/_package.json'),
+      this.destinationPath(folderPath + 'public/package.json'),
+      {
+        slugifiedAppName: this.slugifiedAppName,
+        appDescription: this.appDescription,
+        capitalizedAppAuthor: this.capitalizedAppAuthor
+      });
+
     // copy bower.json
     this.fs.copyTpl(
-      this.templatePath('_bower.json'),
-      this.destinationPath(folderPath + 'bower.json'),
+      this.templatePath('public/_bower.json'),
+      this.destinationPath(folderPath + 'public/bower.json'),
       {
         slugifiedAppName: this.slugifiedAppName,
         appDescription: this.appDescription,
@@ -176,8 +211,8 @@ module.exports = yeoman.generators.Base.extend({
 
     // copy app/index.html
     this.fs.copyTpl(
-      this.templatePath('app/_index.html'),
-      this.destinationPath(folderPath + 'app/index.html'),
+      this.templatePath('public/app/_index.html'),
+      this.destinationPath(folderPath + 'public/app/index.html'),
       {
         slugifiedAppName: this.slugifiedAppName
       });
