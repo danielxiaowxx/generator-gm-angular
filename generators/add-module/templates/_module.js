@@ -1,6 +1,7 @@
 (function() {
 
   // 声明模块控制器
+  angular.module('<%= moduleName %>.service', ['common.service']);
   angular.module('<%= moduleName %>.controller', []);
 
   // 声明模块
@@ -23,10 +24,10 @@
     function config($routeProvider) {
 
       $routeProvider
-        .when('/<%= moduleName %>/<%= moduleName %>-list', {
-          templateUrl: '<%= moduleName %>/partials/<%= moduleName %>-list.tpl.html',
-          controller : '<%= firstCapCamelModuleName %>ListCtrl'
-        })
+        //.when('/<%= moduleName %>/<%= moduleName %>-list', {
+        //  templateUrl: '<%= moduleName %>/partials/<%= moduleName %>-list.tpl.html',
+        //  controller : '<%= firstCapCamelModuleName %>ListCtrl'
+        //})
         .when('/<%= moduleName %>', {redirectTo: '/<%= moduleName %>/<%= moduleName %>-list'});
     }
   ]);

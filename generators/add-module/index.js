@@ -38,7 +38,8 @@ module.exports = yeoman.generators.Base.extend({
   removeFiles: function() {
     common.removeFiles(this, [
       '_module.js',
-      'assets/less/_style.less'
+      'assets/less/_style.less',
+      'services/_rest-service.js'
     ], folder)
   },
 
@@ -50,6 +51,14 @@ module.exports = yeoman.generators.Base.extend({
       {
         moduleName             : this.moduleName,
         firstCapCamelModuleName: this.firstCapCamelModuleName
+      });
+
+    this.fs.copyTpl(
+      this.templatePath('./services/_rest-service.js'),
+      this.destinationPath(folderPath + 'services/' + this.moduleName + '-rest-service.js'),
+      {
+        moduleName     : this.moduleName,
+        camelModuleName: this.camelModuleName
       });
 
     this.fs.copyTpl(
@@ -89,11 +98,11 @@ module.exports = yeoman.generators.Base.extend({
   addDependencyToApp: function() {
     var fullPath = 'public/app/app.js';
     util.rewriteFile({
-      file     : fullPath,
-      isAppend: true,
+      file       : fullPath,
+      isAppend   : true,
       appendAfter: true,
-      needle   : "'demo'",
-      splicable: [
+      needle     : "'demo'",
+      splicable  : [
         ", '" + this.moduleName + "'"
       ]
     });

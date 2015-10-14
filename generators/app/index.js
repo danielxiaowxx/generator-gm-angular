@@ -35,11 +35,15 @@ module.exports = yeoman.generators.Base.extend({
             logger.green('------------------------------------------');
             logger.green('Your application is ready!');
             logger.log('');
-            logger.green('To Get Started, run the following command:');
+            logger.green('To Get Started, open two terminals and run the following command:');
             logger.log('');
             logger.yellow('cd ' + folder + ' && nodemon bin/www');
             logger.log('');
             logger.yellow('cd ' + folder + '/public && gulp develop');
+            logger.log('');
+            logger.log('pages url: http://localhost:8888/index.html');
+            logger.log('');
+            logger.log('api url: http://localhost:8080/demo/sayHello?name=daniel');
             logger.log('');
             logger.green('Happy Hacking!');
             logger.green('------------------------------------------');
